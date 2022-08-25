@@ -56,17 +56,18 @@ public class PostServiceImpl implements PostService{
 		
 		int result;
 		
-		if(post.getPostNo() != 0) {
-			result = postMapper.updatePost(post);
-		} else {
-			result = postMapper.writePost(post);
-		}
+		result = postMapper.writePost(post);
 
 		if(result <= 0) {
 			throw new Exception("게시글 등록에 실패하였습니다.");
 		}
 		
 		return result > 0 ? true : false;
+	}
+	
+	@Override
+	public int updatePost(PostDTO post) {
+		return postMapper.updatePost(post);
 	}
 
 

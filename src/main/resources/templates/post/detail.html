@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+
+xmlns:sec="http://thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -51,12 +53,23 @@
                 </div>
                 <section class="section">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header" >
                             <a th:href="@{/post/write}" class="btn btn-outline-primary">새글쓰기</a>
-	                        <a th:href="@{'/post/update/no/' + ${ post.postNo }}" class="btn btn-outline-primary">수정하기</a>
-	                        <a th:href="@{'/post/delete/no/' + ${ post.postNo }}" class="btn btn-outline-primary" onclick="removeCheck()">삭제하기</a>
+                            <div class="card-header-login" th:with="username=${ #authentication.name }">
+	                        <a th:href="@{'/post/update/no/' + ${ post.postNo }}" th:if="${ #strings.equals(post.member.id, username) }" class="btn btn-outline-primary">수정하기</a>
+	                        <a th:href="@{'/post/delete/no/' + ${ post.postNo }}" th:if="${ #strings.equals(post.member.id, username) }" class="btn btn-outline-primary" onclick="deletePostCheck()">삭제하기</a>
+	                        </div>
                             <a th:href="@{/post/list}" class="btn btn-outline-primary" id="btn-list">목록보기</a>
                         </div>
+                        <script>
+                        function deletePostCheck(){
+                        	if(confirm("게시글을 삭제하시겠습니까?")==true){
+                        		document.submit();
+                        	} else{
+                        		return false;
+                        	}
+                        }
+                        </script>
                         <hr><br>
                         <div class="card-body">
                             <div class="com-detail-title">
@@ -101,9 +114,18 @@
                                             </div>
                                             <div class="reply-btn-ud">
 		                                    	<a data-toggle="collapse" href="#updateReply" role="button" aria-expanded="false" aria-controls="updateReply">수정</a>
-		                                    	<a th:href="@{'/reply/delete/' + ${ reply.replyNo }}" onclick="removeCheck2();">삭제</a>
+		                                    	<a th:href="@{'/reply/delete/' + ${ reply.replyNo }}" onclick="deleteReplyCheck();">삭제</a>
 		                                    </div>
                                         </div>
+                                        <script>
+									    function deleteReplyCheck(){
+									    	if(confirm("댓글을 삭제하시겠습니까?")==true){
+									    		document.submit();
+									    	} else{
+									    		return false;
+									    	}
+									    }
+									    </script>
                                         <div class="reply-content">
                                             <p th:text="${ reply.replyContent }">댓글 내용</p>
                                         </div>
@@ -181,24 +203,6 @@
 
     <script src="/assets/js/main.js"></script>
     
-    <script>
-    function removeCheck(){
-    	if(confirm("게시글을 삭제하시겠습니까?")==true){
-    		document.submit();
-    	} else{
-    		return false;
-    	}
-    }
-    
-    function removeCheck2(){
-    	if(confirm("댓글을 삭제하시겠습니까?")==true){
-    		document.submit();
-    	} else{
-    		return false;
-    	}
-    }
-    
-    </script>
 
 </body>
 

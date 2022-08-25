@@ -102,8 +102,14 @@
 	
 	<!-- 상단 공지사항 조회 -->
 	<select id="showNotice" resultMap="postResultMap">
-		<![CDATA[SELECT * FROM (SELECT * FROM POST JOIN TBL_MEMBER ON (POST.NO=TBL_MEMBER.NO) WHERE CATEGORY_NO=0 AND POST_STATUS='Y' ORDER BY POST_NO DESC) 
-									WHERE ROWNUM <= 2 ORDER BY POST_NO DESC]]>
+		<![CDATA[SELECT * 
+				   FROM (SELECT * 
+				  		  FROM POST 
+				  		  JOIN TBL_MEMBER ON (POST.NO=TBL_MEMBER.NO) 
+				  		  WHERE CATEGORY_NO=0 AND POST_STATUS='Y' 
+				  		  ORDER BY POST_NO DESC) 
+				  WHERE ROWNUM <= 2 
+				  ORDER BY POST_NO DESC]]>
 	</select>
 	
 	<!-- 카테고리 조회 -->
@@ -143,6 +149,7 @@
 		SELECT
 			  P.*
 			, M.NAME
+			, M.ID
 		 FROM POST P
 		 JOIN TBL_MEMBER M ON (P.NO = M.NO)
 		WHERE P.POST_STATUS = 'Y'
