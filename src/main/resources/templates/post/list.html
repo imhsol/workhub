@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+
+xmlns:sec="http://thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -57,7 +59,7 @@
                         <div class="card-header">
                             <a th:href="@{/post/write}" class="btn btn-outline-primary">새글쓰기</a>
 <!--                             <a th:href="@{/post/delete}" class="btn btn-outline-primary">삭제하기</a> -->
-<!--                             <a th:href="@{/post/noticeRegist}" class="btn btn-outline-primary">공지등록</a> -->
+                            <a th:href="@{/post/noticeRegist}" class="btn btn-outline-primary" sec:authorize="hasRole('ADMIN')">공지등록</a>
                         </div>
                         <div class="card-body">
                             <table class="table table-borderless" id="table1">
@@ -75,7 +77,7 @@
                                     <tr th:each="notice:${notice}" class="post-notice">
 <!--                                         <td th:text="${notice.postNo}">글번호</td> -->
                                         <td><img src="/assets/images/post-surv/public-relation.png" class="icon-notice"></td>
-                                        <td th:text="${notice.postTitle}" class="post-title">게시글 제목</td>
+                                        <td><a th:href="@{/post/detail/no/{postNo}(postNo=${notice.postNo})}"  th:text="${notice.postTitle}" class="post-title">게시글 제목</a></td>
                                         <td th:text="${notice.member.name}">작성자</td>
                                         <td th:text="${notice.postDate}">작성 날짜</td>
                                         <td>0</td>

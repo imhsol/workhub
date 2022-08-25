@@ -1,8 +1,12 @@
 package com.work.workhub.member.post.controller;
 
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.tomcat.jni.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,6 +44,7 @@ public class PostController {
 		this.messageSource = messageSource;
 		this.replyService = replyService;
 	}
+
 	
 	
 	//게시판 목록 조회
@@ -82,9 +86,12 @@ public class PostController {
 	
 	//게시글 상세페이지
 	@GetMapping("detail/no/{postNo}")
-	public ModelAndView selectPostDetail(ModelAndView mv, @PathVariable("postNo") Integer postNo) {
+	public ModelAndView selectPostDetail(ModelAndView mv, @PathVariable("postNo") Integer postNo, @AuthenticationPrincipal UserImpl user) {
 
 		PostDTO post = postService.findPostByNo(postNo);
+		
+		log.info("글 작성자 id : {}", post.getMember().getId());
+		log.info("글 조회자 id : {}", user.getId());
 		
 		mv.addObject("post", post);
 		
@@ -108,7 +115,9 @@ public class PostController {
 	public String writePost(@ModelAttribute PostDTO post, @AuthenticationPrincipal UserImpl user, RedirectAttributes rttr, Locale locale) throws Exception {
 		
 		post.setNo(user.getNo());
+		
 		log.info("등록 요청 글 : {}", post);
+		log.info("등록글 작성자 번호 : {}", post.getNo());
 		
 		postService.writePost(post);
 		
@@ -121,7 +130,7 @@ public class PostController {
 	
 	//게시글 수정
 	@GetMapping("update/no/{postNo}")
-	public ModelAndView updatePost(ModelAndView mv, @PathVariable("postNo") Integer postNo) {
+	public ModelAndView updatePost(ModelAndView mv, @PathVariable("postNo") Integer postNo, @AuthenticationPrincipal UserImpl user) {
 
 		PostDTO post = postService.findPostByNo(postNo);
 		
@@ -134,15 +143,15 @@ public class PostController {
 	@PostMapping("update/no/{postNo}")
 	public String updatePost(@ModelAttribute PostDTO post, @AuthenticationPrincipal UserImpl user, RedirectAttributes rttr, Locale locale) throws Exception {
 		
-		post.setNo(user.getNo());
 		log.info("수정 요청 postNo : " , post.getPostNo());
-		log.info("수정 요청 글 : {}", post);
+		log.info("수정 요청 글 : {}", post.getPostTitle());
 		
-		postService.writePost(post);
+		postService.updatePost(post);
 		
 		rttr.addFlashAttribute("successMessage", messageSource.getMessage("updatePost", null, locale));
 		
 		return "redirect:/post/detail/no/" + post.getPostNo();
+		
 	}
 	
 	
@@ -152,7 +161,6 @@ public class PostController {
 		
 		PostDTO post = postService.findPostByNo(postNo);
 		
-		post.setNo(user.getNo());
 		log.info("삭제 요청 글 : {}", post.getPostNo());
 		
 		postService.deletePost(postNo);
@@ -160,6 +168,7 @@ public class PostController {
 		rttr.addFlashAttribute("successMessage", messageSource.getMessage("deletePost", null, locale));
 		
 		return "redirect:/post/list";
+
 	}
 
 	

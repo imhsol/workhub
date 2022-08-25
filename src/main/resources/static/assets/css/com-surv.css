@@ -21,7 +21,7 @@
     height: 2.2rem;
 }
 
-.post-notice td{
+.post-notice td, .post-notice td a{
 	font-weight: bold;
 	color: #7b8abf;
 }
@@ -95,7 +95,6 @@
     display:flex;
 }
 
-
 .com-detail-reply{
     margin-top: 3%
 }
@@ -160,6 +159,11 @@
 
 .card-header{
     margin-top: 20px;
+}
+
+.card-header-login{
+	float: left;
+	margin-right: 0.2rem;
 }
 
 .post-write-select{

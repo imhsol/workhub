@@ -17,6 +17,8 @@ public interface PostService {
 	PostDTO findPostByNo(Integer postNo);
 	
 	boolean writePost(PostDTO post) throws Exception;
+	
+	int updatePost(PostDTO post);
 
 	int deletePost(Integer postNo);
 
