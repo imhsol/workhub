@@ -19,13 +19,13 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
     <link rel="stylesheet" href="/assets/css/app2.css">
     <link rel="stylesheet" href="/assets/css/com-surv.css">
     <link rel="shortcut icon" th:href="@{/assets/images/images/favicon-workHub.ico}" type="image/x-icon">
-    <script>
-		const successMessage = '[[${successMessage}]]';
+<!--     <script> -->
+<!-- 		const successMessage = '[[${successMessage}]]'; -->
 		
-		if(successMessage) {
-			alert(successMessage);
-		}
-	</script>
+<!-- 		if(successMessage) { -->
+<!-- 			alert(successMessage); -->
+<!-- 		} -->
+<!-- 	</script> -->
 </head>
 
 <body>
@@ -58,7 +58,7 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
                     <div class="card">
                         <div class="card-header">
                             <a th:href="@{/post/write}" class="btn btn-outline-primary">새글쓰기</a>
-<!--                             <a th:href="@{/post/delete}" class="btn btn-outline-primary">삭제하기</a> -->
+                            <a th:href="@{/post/delete}" class="btn btn-outline-primary" sec:authorize="hasRole('ADMIN')">삭제하기</a>
                             <a th:href="@{/post/noticeRegist}" class="btn btn-outline-primary" sec:authorize="hasRole('ADMIN')">공지등록</a>
                         </div>
                         <div class="card-body">
@@ -88,8 +88,8 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
                                         <td><a th:href="@{/post/detail/no/{postNo}(postNo=${post.postNo})}" th:text="${post.postTitle}" class="post-title">게시글 제목</a></td>
                                         <td th:text="${post.member.name}">작성자</td>
                                         <td th:text="${post.postDate}">작성 날짜</td>
-                                        <td>0</td>
-                                        <td>0</td>
+                                        <td th:text="${post.postCnt}">조회수</td>
+                                        <td th:text="${post.postLike.postLikeCnt}">추천수</td>
                                     </tr>
                                 </tbody>
                             </table>

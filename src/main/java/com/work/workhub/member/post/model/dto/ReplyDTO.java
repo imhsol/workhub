@@ -13,9 +13,6 @@ import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
 @Data
 public class ReplyDTO {
 

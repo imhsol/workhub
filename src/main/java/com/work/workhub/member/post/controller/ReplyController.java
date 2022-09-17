@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -74,16 +75,18 @@ public class ReplyController {
 	
 	//댓글 삭제
 	@GetMapping("delete/{replyNo}")
-	public String deleteReply(@ModelAttribute ReplyDTO reply, @AuthenticationPrincipal UserImpl user, RedirectAttributes rttr, Locale locale) throws Exception {
+	public String deletePost(@PathVariable("replyNo") String replyNo, RedirectAttributes rttr, Locale locale) {
 		
-		reply.setNo(user.getNo());
-		log.info("삭제 요청 replyNo : ", reply.getReplyNo());
+		int delNo = Integer.parseInt(replyNo);
 		
-		replyService.deleteReply(reply.getReplyNo());
+		log.info("삭제 요청 댓글 : {}", delNo);
 		
-		rttr.addFlashAttribute("successMessage", messageSource.getMessage("deleteReply", null, locale));
+		replyService.deleteReply(delNo);
+		
+		rttr.addFlashAttribute("successMessage", messageSource.getMessage("deletePost", null, locale));
 		
 		return "redirect:/post/list";
+
 	}
 
 	

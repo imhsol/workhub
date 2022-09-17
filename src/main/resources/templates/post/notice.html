@@ -90,8 +90,8 @@
                                         <td><a th:href="@{/post/detail/no/{postNo}(postNo=${notice.postNo})}" th:text="${notice.postTitle}" class="post-title">게시글 제목</a></td>
                                         <td th:text="${notice.member.name}">작성자</td>
                                         <td th:text="${notice.postDate}">작성 날짜</td>
-                                        <td>0</td>
-                                        <td>0</td>
+                                        <td th:text="${notice.postCnt}">조회수</td>
+                                        <td th:text="${notice.postLike.postLikeCnt}">추천수</td>
                                     </tr>
                                 </tbody>
                             </table>

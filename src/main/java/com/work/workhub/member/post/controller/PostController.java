@@ -1,12 +1,9 @@
 package com.work.workhub.member.post.controller;
 
-import java.io.PrintWriter;
+
 import java.util.List;
 import java.util.Locale;
 
-import javax.servlet.http.HttpSession;
-
-import org.apache.tomcat.jni.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.work.workhub.member.member.dto.UserImpl;
 import com.work.workhub.member.post.model.dto.CategoryDTO;
 import com.work.workhub.member.post.model.dto.PostDTO;
+import com.work.workhub.member.post.model.dto.PostLikeDTO;
 import com.work.workhub.member.post.model.dto.ReplyDTO;
 import com.work.workhub.member.post.model.service.PostService;
 import com.work.workhub.member.post.model.service.ReplyService;
@@ -90,6 +88,8 @@ public class PostController {
 
 		PostDTO post = postService.findPostByNo(postNo);
 		
+		postService.updatePostCnt(postNo);
+		
 		log.info("글 작성자 id : {}", post.getMember().getId());
 		log.info("글 조회자 id : {}", user.getId());
 		
@@ -105,6 +105,23 @@ public class PostController {
 		
 		return mv;
 	}
+	
+	
+	//게시글 추천
+//	@GetMapping("like/{postNo}")
+//	public void likePost(@ModelAttribute PostLikeDTO postLike, @PathVariable("postNo") String postNo, @AuthenticationPrincipal UserImpl user) {
+//		
+//		int likeNo = Integer.parseInt(postNo);
+//		
+//		postLike.setNo(user.getNo());
+//		postLike.setPostNo(likeNo);
+//
+//		postService.likePost(postLike);
+//		
+//		log.info("추천수 : " , postLike.getPostLikeCnt());
+//		log.info("추천글 : " , postLike.getPostNo());
+//		log.info("추천인 : " , postLike.getNo());
+//	}
 	
 	
 	//게시글 작성
@@ -157,13 +174,13 @@ public class PostController {
 	
 	 //게시글 삭제
 	@GetMapping("delete/no/{postNo}")
-	public String deletePost(@PathVariable("postNo") Integer postNo, @AuthenticationPrincipal UserImpl user, RedirectAttributes rttr, Locale locale) {
+	public String deletePost(@PathVariable("postNo") String postNo, RedirectAttributes rttr, Locale locale) {
 		
-		PostDTO post = postService.findPostByNo(postNo);
+		int delNo = Integer.parseInt(postNo);
 		
-		log.info("삭제 요청 글 : {}", post.getPostNo());
+		log.info("삭제 요청 글 : {}", delNo);
 		
-		postService.deletePost(postNo);
+		postService.deletePost(delNo);
 		
 		rttr.addFlashAttribute("successMessage", messageSource.getMessage("deletePost", null, locale));
 		

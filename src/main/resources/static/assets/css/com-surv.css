@@ -211,6 +211,13 @@
 	padding-left: 0;
 }
 
+.like-btn{
+	outline: none;
+	border-style: none;
+    background: none;
+    
+}
+
 
 
 /* surv ------------------- */
