@@ -7,8 +7,8 @@ import lombok.Data;
 @Data
 public class PostLikeDTO {
 	
-	private int postLikeCnt;
 	private int postNo;
 	private int no;
+	private int likeCheck;
 
 }

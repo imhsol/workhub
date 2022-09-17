@@ -24,6 +24,8 @@ public class PostDTO {
 	private Date noticeEndDate;
 	private int categoryNo;
 	private int postCnt;
+	private int replyCnt;
+	private int likeCnt;
 	private int no;
 
 	private PostLikeDTO postLike;
