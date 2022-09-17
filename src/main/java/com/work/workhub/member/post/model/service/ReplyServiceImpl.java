@@ -44,8 +44,8 @@ public class ReplyServiceImpl implements ReplyService{
 	}
 
 	@Override
-	public int deleteReply(int replyNo) {
-		return replyMapper.deleteReply(replyNo);
+	public int deleteReply(int delNo) {
+		return replyMapper.deleteReply(delNo);
 	}
 
 

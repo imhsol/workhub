@@ -8,7 +8,6 @@
 		<result property="replyContent" column="REPLY_CONTENT"/>
 		<result property="replyDate" column="REPLY_DATE"/>
 		<result property="replyUpdate" column="REPLY_UPDATE"/>
-		<result property="replyStatus" column="REPLY_STATUS"/>
 		<result property="postNo" column="POST_NO"/>
 		<result property="no" column="NO"/>
 		<result property="refReplyNo" column="REF_REPLY_NO"/>
@@ -56,7 +55,6 @@
 		<result property="postDate" column="POST_DATE"/>
 		<result property="postUpdate" column="POST_UPDATE"/>
 		<result property="noticeEndDate" column="NOTICE_END_DATE"/>
-		<result property="postStatus" column="POST_STATUS"/>
 		<result property="no" column="NO"/>
 		<result property="categoryNo" column="CATEGORY_NO"/>
 		
@@ -109,8 +107,7 @@
 			, M.NAME
 		 FROM REPLY R
 		 JOIN TBL_MEMBER M ON (R.NO = M.NO)
-		WHERE R.REPLY_STATUS = 'Y'
-		  AND R.POST_NO = #{ postNo } 
+		WHERE R.POST_NO = #{ postNo } 
 	</select>
 	
 	<!-- 댓글 작성 -->
@@ -120,7 +117,6 @@
 		  REPLY_NO
 		, REPLY_CONTENT
 		, REPLY_DATE
-		, REPLY_STATUS
 		, POST_NO
 		, NO
 		)
@@ -129,7 +125,6 @@
 		  SEQ_REPLY_NO.NEXTVAL
 		, #{ replyContent }
 		, SYSDATE
-		, DEFAULT
 		, #{ postNo }
 		, #{ no }
 		)
@@ -144,11 +139,11 @@
 	</update>	
 	
 	<!-- 댓글 삭제 -->
-	<update id="deleteReply">
-		UPDATE REPLY
-		  SET REPLY_STATUS = 'N'
-		WHERE REPLY_NO = #{ replyNo }
-	</update>	
+	<delete id="deleteReply">
+		DELETE 
+		  FROM REPLY
+		 WHERE REPLY_NO = #{ delNo }
+	</delete>	
 	
 	
 

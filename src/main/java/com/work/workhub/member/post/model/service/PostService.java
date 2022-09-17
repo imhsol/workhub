@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.work.workhub.member.post.model.dto.CategoryDTO;
 import com.work.workhub.member.post.model.dto.PostDTO;
+import com.work.workhub.member.post.model.dto.PostLikeDTO;
 import com.work.workhub.member.post.model.dto.ReplyDTO;
 
 public interface PostService {
@@ -20,9 +21,15 @@ public interface PostService {
 	
 	int updatePost(PostDTO post);
 
-	int deletePost(Integer postNo);
+	int deletePost(Integer delNo);
 
 	List<PostDTO> showNotice();
+
+	int updatePostCnt(Integer postNo);
+
+	int updateReplyCnt(Integer postNo);
+
+//	int likePost(PostLikeDTO postLike);
 
 	
 }

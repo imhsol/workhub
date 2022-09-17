@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.work.workhub.member.post.model.dao.PostMapper;
 import com.work.workhub.member.post.model.dto.CategoryDTO;
 import com.work.workhub.member.post.model.dto.PostDTO;
+import com.work.workhub.member.post.model.dto.PostLikeDTO;
 import com.work.workhub.member.post.model.dto.ReplyDTO;
 
 @Service("postService")
@@ -72,9 +73,26 @@ public class PostServiceImpl implements PostService{
 
 
 	@Override
-	public int deletePost(Integer postNo) {
-		return postMapper.deletePost(postNo);
+	public int deletePost(Integer delNo) {
+		return postMapper.deletePost(delNo);
 	}
+
+
+	@Override
+	public int updatePostCnt(Integer postNo) {
+		return postMapper.updatePostCnt(postNo);
+	}
+	
+	@Override
+	public int updateReplyCnt(Integer postNo) {
+		return postMapper.updateReplyCnt(postNo);
+	}
+
+
+//	@Override
+//	public int likePost(PostLikeDTO postLike) {
+//		return postMapper.likePost(postLike);
+//	}
 
 
 

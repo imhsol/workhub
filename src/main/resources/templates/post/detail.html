@@ -27,7 +27,7 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
 
 <body>
     <div id="app">
-        <div th:include="sidebar/sidebar-com" th:remove="tag"/>
+       <div th:include="sidebar/sidebar-com" th:remove="tag"/>
         <div id="main">
             <header class="mb-3">
                 <a href="#" class="burger-btn d-block d-xl-none">
@@ -57,14 +57,14 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
                             <a th:href="@{/post/write}" class="btn btn-outline-primary">새글쓰기</a>
                             <div class="card-header-login" th:with="username=${ #authentication.name }">
 	                        <a th:href="@{'/post/update/no/' + ${ post.postNo }}" th:if="${ #strings.equals(post.member.id, username) }" class="btn btn-outline-primary">수정하기</a>
-	                        <a th:href="@{'/post/delete/no/' + ${ post.postNo }}" th:if="${ #strings.equals(post.member.id, username) }" class="btn btn-outline-primary" onclick="deletePostCheck()">삭제하기</a>
+	                        <a href="#" th:id="${ post.postNo }" th:onclick="deletePost(this.getAttribute('id'))" th:if="${ #strings.equals(post.member.id, username) }" class="btn btn-outline-primary">삭제하기</a>
 	                        </div>
                             <a th:href="@{/post/list}" class="btn btn-outline-primary" id="btn-list">목록보기</a>
                         </div>
-                        <script>
-                        function deletePostCheck(){
-                        	if(confirm("게시글을 삭제하시겠습니까?")==true){
-                        		document.submit();
+                        <script th:inline="javascript">
+                        function deletePost(postNo){
+                        	if(confirm("게시글을 삭제하시겠습니까?")===true){
+                        		location.href=`/post/delete/no/${postNo}`;
                         	} else{
                         		return false;
                         	}
@@ -81,10 +81,16 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
 <!--                                     </div> -->
                                 </div>
                                 <div class="com-detail-heart">
-                                    <span>0</span>
-                                    <img src="/assets/images/post-surv/emptyHeart.png" class="icon-emptyHeart">
+                                    <span th:text="${post.likeCnt}">추천수</span>
+                                    <button type="submit" class="like-btn" th:id="${ post.postNo }" th:onclick="likePost(this.getAttribute('id'))" ><img id="emptyHeart" src="/assets/images/post-surv/emptyHeart.png" class="icon-emptyHeart"></button>
                                 </div>
                             </div>
+                            <script th:inline="javascript">
+                            function likePost(postNo){
+                            	document.getElementById("emptyHeart").src="/assets/images/post-surv/fullHeart.png";
+                            	location.href=`/post/like/${postNo}`;
+                            }
+                            </script>
                             <div class="com-detail-writer">
                                 <img src="/assets/images/post-surv/grey.png" alt="profile" class="profile-photo">
                                 <p th:text="${ post.member.name }">작성자</p><br>
@@ -95,8 +101,10 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
                                     내용
                                 </div>
                                 <div class="detail-body-footer">
-<!--                                     <p> <img src="/assets/images/post-surv/messenger.png" class="icon-messenger"> 댓글 1개 | 조회 1 |   -->
-                                        <img src="/assets/images/post-surv/emptyHeart.png" class="icon-heart"> 추천 누른 사람 0명</p>
+                                    <img src="/assets/images/post-surv/messenger.png" class="icon-messenger"> 
+                                    <span>댓글 </span> <span th:text="${ #lists.size(reply) }">댓글수</span> 
+                                    <span>개 | 조회 </span> 
+                                    <span th:text="${post.postCnt}">조회수</span>
                                 </div>
                             </div><hr>
                             
@@ -114,18 +122,18 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
                                             </div>
                                             <div class="reply-btn-ud">
 		                                    	<a data-toggle="collapse" href="#updateReply" role="button" aria-expanded="false" aria-controls="updateReply">수정</a>
-		                                    	<a th:href="@{'/reply/delete/' + ${ reply.replyNo }}" onclick="deleteReplyCheck();">삭제</a>
+		                                    	<a href="#" th:id="${ reply.replyNo }" th:onclick="deleteReply(this.getAttribute('id'))" th:if="${ #strings.equals(reply.member.id, username) }">삭제</a>
 		                                    </div>
                                         </div>
-                                        <script>
-									    function deleteReplyCheck(){
-									    	if(confirm("댓글을 삭제하시겠습니까?")==true){
-									    		document.submit();
-									    	} else{
-									    		return false;
-									    	}
-									    }
-									    </script>
+				                        <script th:inline="javascript">
+				                        function deleteReply(replyNo){
+				                        	if(confirm("댓글을 삭제하시겠습니까?")===true){
+				                        		location.href=`/reply/delete/${replyNo}`;
+				                        	} else{
+				                        		return false;
+				                        	}
+				                        }
+				                        </script>
                                         <div class="reply-content">
                                             <p th:text="${ reply.replyContent }">댓글 내용</p>
                                         </div>
@@ -149,45 +157,7 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
 <!--                                 <input type="file" class="btn btn-outline-secondary me-1 mb-1 btn-sm"">첨부</button> -->
                                 <input type="submit" class="btn btn-secondary me-1 mb-1 btn-sm" value="등록">
                             </form>
-<!--                             <hr> -->
-                            
 
-<!--                             <div class="post-detail-list"> -->
-<!--                                 <table class="table table-borderless" id="table1"> -->
-<!--                                 <thead> -->
-<!--                                     <tr> -->
-<!--                                         <th> -->
-<!--                                             <div class="checkbox checkbox-shadow"> -->
-<!--                                                 <input type="checkbox" class="form-check-input" id="checkbox1"> -->
-<!--                                                 <label for="checkbox1"></label> -->
-<!--                                             </div> -->
-<!--                                         </th> -->
-<!--                                         <th>번호</th> -->
-<!--                                         <th>제목</th> -->
-<!--                                         <th>작성자</th> -->
-<!--                                         <th>작성일</th> -->
-<!--                                         <th>조회</th> -->
-<!--                                         <th>추천</th> -->
-<!--                                     </tr> -->
-<!--                                 </thead> -->
-<!--                                 <tbody> -->
-<!--                                     <tr th:each="post:${postList}"> -->
-<!--                                         <td> -->
-<!--                                             <div class="checkbox checkbox-shadow"> -->
-<!--                                                 <input type="checkbox" class="form-check-input" id="checkbox1"> -->
-<!--                                                 <label for="checkbox1"></label> -->
-<!--                                             </div> -->
-<!--                                         </td> -->
-<!--                                         <td th:text="${post.postNo}">글번호</td> -->
-<!--                                         <td><a th:href="@{/post/detail/no/{postNo}(postNo=${post.postNo})}" th:text="${post.postTitle}" class="post-title">게시글 제목</a></td> -->
-<!--                                         <td th:text="${post.member.name}">작성자</td> -->
-<!--                                         <td th:text="${post.postDate}">작성 날짜</td> -->
-<!--                                         <td>0</td> -->
-<!--                                         <td>0</td> -->
-<!--                                     </tr> -->
-<!--                                 </tbody> -->
-<!--                             </table> -->
-<!--                             </div> -->
                         </div>
                     </div>
                 </section>

@@ -13,9 +13,6 @@ import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
 @Data
 public class PostDTO {
 	
@@ -25,10 +22,13 @@ public class PostDTO {
 	private Date postDate; 
 	private Date postUpdate;
 	private Date noticeEndDate;
-	private String postStatus;
 	private int categoryNo;
+	private int postCnt;
+	private int replyCnt;
+	private int likeCnt;
 	private int no;
 
+	private PostLikeDTO postLike;
 	private CategoryDTO category;
 	private MemberDTO member;
 }

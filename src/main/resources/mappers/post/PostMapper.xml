@@ -10,14 +10,22 @@
 		<result property="postDate" column="POST_DATE"/>
 		<result property="postUpdate" column="POST_UPDATE"/>
 		<result property="noticeEndDate" column="NOTICE_END_DATE"/>
-		<result property="postStatus" column="POST_STATUS"/>
 		<result property="no" column="NO"/>
 		<result property="categoryNo" column="CATEGORY_NO"/>
+		<result property="postCnt" column="POST_CNT"/>
+		<result property="replyCnt" column="REPLY_CNT"/>
+		<result property="likeCnt" column="LIKE_CNT"/>
 		
 		<association property="member" resultMap="loginMemberResultMap"/>
 		<association property="category" resultMap="categoryResultMap"/>
-		
+		<association property="postLike" resultMap="postLikeResultMap"/>
 <!-- 		<collection property="postImg" resultMap="postImgResultMap"/> -->
+	</resultMap>
+	
+	<resultMap type="com.work.workhub.member.post.model.dto.PostLikeDTO" id="postLikeResultMap">
+		<id property="postNo" column="POST_NO"/>
+		<id property="no" column="NO"/>
+		<result property="likeCheck" column="LIKE_CHECK"/>
 	</resultMap>
 	
 	<!-- category -->
@@ -78,13 +86,30 @@
 			  A.POST_NO
 			, A.POST_TITLE
 			, A.POST_DATE
+			, A.POST_CNT
+			, A.REPLY_CNT
+			, A.LIKE_CNT
 			, B.NAME
 		 FROM POST A
 		 JOIN TBL_MEMBER B ON (A.NO = B.NO)
-		WHERE A.POST_STATUS = 'Y'
-		  AND A.CATEGORY_NO = 1
+		WHERE A.CATEGORY_NO = 1
 		ORDER BY A.POST_NO DESC
 	</select>
+	
+	<!-- 게시글 댓글 수 -->
+	<select id="findReplyCnt" resultMap="postResultMap">
+	  SELECT COUNT(*)
+	    FROM REPLY
+	   WHERE POST_NO = #{ postNo }
+	</select>
+	
+	<update id="updateReplyCnt">
+	  UPDATE POST P
+	     SET P.REPLY_CNT = (SELECT COUNT(*)
+	     					  FROM REPLY
+	     					 WHERE POST_NO = #{ postNo })
+	   WHERE P.POST_NO = #{ postNo }
+	</update>
 	
 	<!-- 공지사항 목록 조회 -->
 	<select id="findAllNotice" resultMap="postResultMap">
@@ -92,11 +117,13 @@
 			  A.POST_NO
 			, A.POST_TITLE
 			, A.POST_DATE
+			, A.POST_CNT
+			, A.REPLY_CNT
+			, A.LIKE_CNT
 			, B.NAME
 		 FROM POST A
 		 JOIN TBL_MEMBER B ON (A.NO = B.NO)
-		WHERE A.POST_STATUS = 'Y'
-		  AND A.CATEGORY_NO = 0
+		WHERE A.CATEGORY_NO = 0
 		ORDER BY A.POST_NO DESC
 	</select>	
 	
@@ -106,7 +133,7 @@
 				   FROM (SELECT * 
 				  		  FROM POST 
 				  		  JOIN TBL_MEMBER ON (POST.NO=TBL_MEMBER.NO) 
-				  		  WHERE CATEGORY_NO=0 AND POST_STATUS='Y' 
+				  		  WHERE CATEGORY_NO=0
 				  		  ORDER BY POST_NO DESC) 
 				  WHERE ROWNUM <= 2 
 				  ORDER BY POST_NO DESC]]>
@@ -129,7 +156,9 @@
 		, POST_CONTENT
 		, CATEGORY_NO
 		, POST_DATE
-		, POST_STATUS
+		, POST_CNT
+		, REPLY_CNT
+		, LIKE_CNT
 		, NO
 		)
 		VALUES
@@ -139,6 +168,8 @@
 		, #{ postContent }
 		, #{ categoryNo }
 		, SYSDATE
+		, DEFAULT
+		, DEFAULT
 		, DEFAULT
 		, #{ no }
 		)
@@ -152,9 +183,47 @@
 			, M.ID
 		 FROM POST P
 		 JOIN TBL_MEMBER M ON (P.NO = M.NO)
-		WHERE P.POST_STATUS = 'Y'
-		  AND P.POST_NO = #{ postNo } 
+		WHERE P.POST_NO = #{ postNo } 
 	</select>
+	
+	<!-- 조회수 -->
+	<update id="updatePostCnt">
+	    UPDATE POST
+	      SET POST_CNT = POST_CNT+1
+	    WHERE POST_NO = #{ postNo }
+	</update>
+	
+	<!-- 추천 여부 -->
+	<select id="findPostLike">
+	  SELECT COUNT(*)
+	  	FROM POST_LIKE
+	   WHERE POST_NO = #{ postNo }
+	     AND NO = #{ no }
+	</select>
+	
+	<!-- 추천 -->
+	<insert id="insertLike">
+	  INSERT INTO POSTLIKE
+	  (
+	    POST_NO
+	  , NO
+	  , LIKE_CHECK
+	  )
+	  VALUES
+	  (
+	    #{ postNo }
+	  , #{ no }
+	  , DEFAULT
+	  )
+	</insert>
+	
+	<!-- 추천 취소 -->
+	<delete id="deleteLike">
+	 DELETE 
+	   FROM POST_LIKE
+	  WHERE POST_NO = #{ postNo }
+	    AND NO = #{ no }
+	</delete>
 	
 	<!-- 게시글 수정 -->
 	<update id="updatePost">
@@ -168,9 +237,9 @@
 	
 	<!-- 게시글 삭제 -->
 	<update id="deletePost">
-		UPDATE POST
-		  SET POST_STATUS = 'N'
-		WHERE POST_NO = #{ postNo }
+		DELETE
+		  FROM POST
+		 WHERE POST_NO = #{ delNo }
 	</update>
 	
 </mapper>
