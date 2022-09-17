@@ -29,6 +29,8 @@ public interface PostMapper {
 	List<PostDTO> showNotice();
 	
 	int updatePostCnt(Integer postNo);
+	
+	int updateReplyCnt(Integer postNo);
 
 //	int likePost(PostLikeDTO postLike);
 

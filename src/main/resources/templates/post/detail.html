@@ -81,7 +81,7 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
 <!--                                     </div> -->
                                 </div>
                                 <div class="com-detail-heart">
-                                    <span th:text="${post.postLike.postLikeCnt}">추천수</span>
+                                    <span th:text="${post.likeCnt}">추천수</span>
                                     <button type="submit" class="like-btn" th:id="${ post.postNo }" th:onclick="likePost(this.getAttribute('id'))" ><img id="emptyHeart" src="/assets/images/post-surv/emptyHeart.png" class="icon-emptyHeart"></button>
                                 </div>
                             </div>
@@ -102,7 +102,7 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
                                 </div>
                                 <div class="detail-body-footer">
                                     <img src="/assets/images/post-surv/messenger.png" class="icon-messenger"> 
-                                    <span>댓글 </span> <span th:text="${ #lists.size(reply) }"></span> 
+                                    <span>댓글 </span> <span th:text="${ #lists.size(reply) }">댓글수</span> 
                                     <span>개 | 조회 </span> 
                                     <span th:text="${post.postCnt}">조회수</span>
                                 </div>

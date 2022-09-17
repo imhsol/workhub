@@ -82,6 +82,11 @@ public class PostServiceImpl implements PostService{
 	public int updatePostCnt(Integer postNo) {
 		return postMapper.updatePostCnt(postNo);
 	}
+	
+	@Override
+	public int updateReplyCnt(Integer postNo) {
+		return postMapper.updateReplyCnt(postNo);
+	}
 
 
 //	@Override

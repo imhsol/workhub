@@ -89,9 +89,11 @@ public class PostController {
 		PostDTO post = postService.findPostByNo(postNo);
 		
 		postService.updatePostCnt(postNo);
+		postService.updateReplyCnt(postNo);
 		
 		log.info("글 작성자 id : {}", post.getMember().getId());
 		log.info("글 조회자 id : {}", user.getId());
+		log.info("댓글수 : {}", post.getReplyCnt());
 		
 		mv.addObject("post", post);
 		

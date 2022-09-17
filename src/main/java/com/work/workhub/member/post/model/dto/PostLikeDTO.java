@@ -1,7 +1,5 @@
 package com.work.workhub.member.post.model.dto;
 
-import com.work.workhub.member.member.dto.MemberDTO;
-
 import lombok.Data;
 
 @Data

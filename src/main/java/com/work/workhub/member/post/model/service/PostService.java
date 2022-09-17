@@ -27,6 +27,8 @@ public interface PostService {
 
 	int updatePostCnt(Integer postNo);
 
+	int updateReplyCnt(Integer postNo);
+
 //	int likePost(PostLikeDTO postLike);
 
 	

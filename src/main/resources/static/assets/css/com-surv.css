@@ -215,7 +215,20 @@
 	outline: none;
 	border-style: none;
     background: none;
-    
+}
+
+.reply-bar{
+	color: #435ebe;
+	opacity: 50%;
+	margin: 0 0.3%;
+	font-weight: bold;
+}
+
+.reply-cnt{
+	color: #435ebe;
+	font-weight: bold;
+	opacity: 70%;
+	
 }
 
 
