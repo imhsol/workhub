@@ -29,7 +29,10 @@ public interface PostService {
 
 	int updateReplyCnt(Integer postNo);
 
-//	int likePost(PostLikeDTO postLike);
+	Integer findLike(Integer postNo, String likeId);
+	
+	boolean insertLike(PostLikeDTO postLike) throws Exception;
 
+	int updateLikeCnt(Integer postNo, String likeId);
 	
 }

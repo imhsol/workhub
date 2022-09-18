@@ -26,6 +26,9 @@
 		<id property="postNo" column="POST_NO"/>
 		<id property="no" column="NO"/>
 		<result property="likeCheck" column="LIKE_CHECK"/>
+		<result property="likeId" column="LIKE_ID"/>
+		
+		<association property="member" resultMap="loginMemberResultMap"/>
 	</resultMap>
 	
 	<!-- category -->
@@ -97,12 +100,6 @@
 	</select>
 	
 	<!-- 게시글 댓글 수 -->
-	<select id="findReplyCnt" resultMap="postResultMap">
-	  SELECT COUNT(*)
-	    FROM REPLY
-	   WHERE POST_NO = #{ postNo }
-	</select>
-	
 	<update id="updateReplyCnt">
 	  UPDATE POST P
 	     SET P.REPLY_CNT = (SELECT COUNT(*)
@@ -194,35 +191,46 @@
 	</update>
 	
 	<!-- 추천 여부 -->
-	<select id="findPostLike">
+	<select id="findLike" resultType="int">
 	  SELECT COUNT(*)
 	  	FROM POST_LIKE
 	   WHERE POST_NO = #{ postNo }
-	     AND NO = #{ no }
+	     AND LIKE_ID = #{ likeId }
 	</select>
 	
 	<!-- 추천 -->
 	<insert id="insertLike">
-	  INSERT INTO POSTLIKE
+	  INSERT INTO POST_LIKE
 	  (
 	    POST_NO
 	  , NO
+	  , LIKE_ID
 	  , LIKE_CHECK
 	  )
 	  VALUES
 	  (
 	    #{ postNo }
 	  , #{ no }
+	  , #{ likeId }
 	  , DEFAULT
 	  )
 	</insert>
+	
+	<update id="updateLikeCnt">
+	  UPDATE POST P
+	     SET P.LIKE_CNT = (SELECT COUNT(*)
+	     					  FROM POST_LIKE
+	     					 WHERE POST_NO = #{ postNo }
+	     					   AND LIKE_ID = #{ likeId })
+	   WHERE P.POST_NO = #{ postNo }
+	</update>
 	
 	<!-- 추천 취소 -->
 	<delete id="deleteLike">
 	 DELETE 
 	   FROM POST_LIKE
 	  WHERE POST_NO = #{ postNo }
-	    AND NO = #{ no }
+	    AND LIKE_ID = #{ likeId }
 	</delete>
 	
 	<!-- 게시글 수정 -->
