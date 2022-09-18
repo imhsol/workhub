@@ -32,6 +32,10 @@ public interface PostMapper {
 	
 	int updateReplyCnt(Integer postNo);
 
-//	int likePost(PostLikeDTO postLike);
+	Integer findLike(Integer postNo, String likeId);
+	
+	int insertLike(PostLikeDTO postLike);
+
+	int updateLikeCnt(Integer postNo, String likeId);
 
 }

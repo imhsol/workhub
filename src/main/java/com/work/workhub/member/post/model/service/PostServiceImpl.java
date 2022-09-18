@@ -89,10 +89,31 @@ public class PostServiceImpl implements PostService{
 	}
 
 
-//	@Override
-//	public int likePost(PostLikeDTO postLike) {
-//		return postMapper.likePost(postLike);
-//	}
+	@Override
+	public Integer findLike(Integer postNo, String likeId) {
+		
+		return postMapper.findLike(postNo, likeId);
+	}
+
+
+	@Override
+	public boolean insertLike(PostLikeDTO postLike) throws Exception {
+		
+		int result = postMapper.insertLike(postLike);
+
+		if(result <= 0) {
+			throw new Exception("게시글 추천에 실패하였습니다.");
+		}
+		
+		return result > 0 ? true : false;		
+	}
+
+
+	@Override
+	public int updateLikeCnt(Integer postNo, String likeId) {
+		return postMapper.updateLikeCnt(postNo, likeId);
+	}
+
 
 
 

@@ -19,13 +19,7 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
     <link rel="stylesheet" href="/assets/css/app2.css">
     <link rel="stylesheet" href="/assets/css/com-surv.css">
     <link rel="shortcut icon" th:href="@{/assets/images/images/favicon-workHub.ico}" type="image/x-icon">
-<!--     <script> -->
-<!-- 		const successMessage = '[[${successMessage}]]'; -->
-		
-<!-- 		if(successMessage) { -->
-<!-- 			alert(successMessage); -->
-<!-- 		} -->
-<!-- 	</script> -->
+
 </head>
 
 <body>
@@ -75,7 +69,6 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
                                 </thead>
                                 <tbody>
                                     <tr th:each="notice:${notice}" class="post-notice">
-<!--                                         <td th:text="${notice.postNo}">글번호</td> -->
                                         <td><img src="/assets/images/post-surv/public-relation.png" class="icon-notice"></td>
                                         <td><a th:href="@{/post/detail/no/{postNo}(postNo=${notice.postNo})}"  th:text="${notice.postTitle}" class="post-title">게시글 제목</a></td>
                                         <td th:text="${notice.member.name}">작성자</td>

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -84,16 +85,22 @@ public class PostController {
 	
 	//게시글 상세페이지
 	@GetMapping("detail/no/{postNo}")
+	@ResponseBody
 	public ModelAndView selectPostDetail(ModelAndView mv, @PathVariable("postNo") Integer postNo, @AuthenticationPrincipal UserImpl user) {
 
 		PostDTO post = postService.findPostByNo(postNo);
+		
+		PostLikeDTO postLike = new PostLikeDTO();
+		
+		String likeId = user.getId();
+		Integer likeCnt = postService.findLike(postNo, likeId);
 		
 		postService.updatePostCnt(postNo);
 		postService.updateReplyCnt(postNo);
 		
 		log.info("글 작성자 id : {}", post.getMember().getId());
 		log.info("글 조회자 id : {}", user.getId());
-		log.info("댓글수 : {}", post.getReplyCnt());
+		log.info("추천 확인 : {}", likeCnt);
 		
 		mv.addObject("post", post);
 		
@@ -110,21 +117,28 @@ public class PostController {
 	
 	
 	//게시글 추천
-//	@GetMapping("like/{postNo}")
-//	public void likePost(@ModelAttribute PostLikeDTO postLike, @PathVariable("postNo") String postNo, @AuthenticationPrincipal UserImpl user) {
-//		
-//		int likeNo = Integer.parseInt(postNo);
-//		
-//		postLike.setNo(user.getNo());
-//		postLike.setPostNo(likeNo);
-//
-//		postService.likePost(postLike);
-//		
-//		log.info("추천수 : " , postLike.getPostLikeCnt());
-//		log.info("추천글 : " , postLike.getPostNo());
-//		log.info("추천인 : " , postLike.getNo());
-//	}
-	
+	@PostMapping("insertLike")
+	@ResponseBody
+	public String insertLike(@RequestParam("postNo") Integer postNo, @ModelAttribute PostLikeDTO postLike, @AuthenticationPrincipal UserImpl user, RedirectAttributes rttr, Locale locale) throws Exception {
+		
+		int no = user.getNo();
+		String likeId = user.getId();
+		
+		postLike.setPostNo(postNo);
+		postLike.setNo(no);
+		postLike.setLikeId(likeId);
+		
+		log.info("추천 요청 글 : {}", postNo);
+		log.info("추천 요청 아이디 : {}", no);
+		
+		postService.insertLike(postLike);
+		postService.updateLikeCnt(postNo, likeId);
+		
+		rttr.addFlashAttribute("successMessage", messageSource.getMessage("insertLike", null, locale));
+		
+		return "redirect:/post/detail/no/" + postNo;
+	}
+
 	
 	//게시글 작성
 	@GetMapping("write")
