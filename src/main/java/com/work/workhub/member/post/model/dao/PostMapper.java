@@ -38,4 +38,6 @@ public interface PostMapper {
 
 	int updateLikeCnt(Integer postNo, String likeId);
 
+	int deleteLike(Integer postNo, String likeId);
+
 }

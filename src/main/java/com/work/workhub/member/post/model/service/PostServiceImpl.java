@@ -10,7 +10,6 @@ import com.work.workhub.member.post.model.dao.PostMapper;
 import com.work.workhub.member.post.model.dto.CategoryDTO;
 import com.work.workhub.member.post.model.dto.PostDTO;
 import com.work.workhub.member.post.model.dto.PostLikeDTO;
-import com.work.workhub.member.post.model.dto.ReplyDTO;
 
 @Service("postService")
 @Transactional
@@ -112,6 +111,12 @@ public class PostServiceImpl implements PostService{
 	@Override
 	public int updateLikeCnt(Integer postNo, String likeId) {
 		return postMapper.updateLikeCnt(postNo, likeId);
+	}
+
+
+	@Override
+	public int deleteLike(Integer postNo, String likeId) {
+		return postMapper.deleteLike(postNo, likeId);
 	}
 
 

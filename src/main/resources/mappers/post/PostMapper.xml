@@ -220,8 +220,7 @@
 	  UPDATE POST P
 	     SET P.LIKE_CNT = (SELECT COUNT(*)
 	     					  FROM POST_LIKE
-	     					 WHERE POST_NO = #{ postNo }
-	     					   AND LIKE_ID = #{ likeId })
+	     					 WHERE POST_NO = #{ postNo })
 	   WHERE P.POST_NO = #{ postNo }
 	</update>
 	
