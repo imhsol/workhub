@@ -92,17 +92,22 @@ public class PostController {
 		
 		PostLikeDTO postLike = new PostLikeDTO();
 		
-		String likeId = user.getId();
-		Integer likeCnt = postService.findLike(postNo, likeId);
+		postLike.setPostNo(postNo);
+		postLike.setLikeId(user.getId());
+		
+		Integer findLike = postService.findLike(postNo, user.getId());
 		
 		postService.updatePostCnt(postNo);
 		postService.updateReplyCnt(postNo);
 		
 		log.info("글 작성자 id : {}", post.getMember().getId());
 		log.info("글 조회자 id : {}", user.getId());
-		log.info("추천 확인 : {}", likeCnt);
+		log.info("추천 확인 : {}", findLike);
+		log.info("추천여부 : {}", postLike.getLikeCheck());
 		
 		mv.addObject("post", post);
+		mv.addObject("findLike", findLike);
+		mv.addObject("postLike", postLike);
 		
 		mv.setViewName("/post/detail");
 		

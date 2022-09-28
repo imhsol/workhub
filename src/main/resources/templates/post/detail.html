@@ -83,45 +83,28 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
                                 </div>
                                 <div class="com-detail-heart">
                                     <span th:text="${post.likeCnt}">추천수</span>
-									<input type="hidden" id="likeId" th:value="${ post.postLike.likeId }">
-									<input type="hidden" id="userId" th:value="${ #authentication.name }">
-									<input type="hidden" id="postNo" th:value="${ post.postNo }">
+                                    <input type="hidden" id="likeCheck" th:value="${findLike}">
                                     <button class="like-btn" id="likeBtn" name="likeBtn"><img id="likeImg" src="/assets/images/post-surv/emptyHeart.png" class="icon-emptyHeart"></button>
                                 </div>
                             </div>
                             <script>
-                            $(function postLike(){
+                            
+                            $(function(){
                             	
-                            	const postNo = $('#postNo').val();
-                            	console.log(postNo);
-                            	
-                            	const userId = $('#userId').val();
-                            	console.log(userId);
-                            	
-                            	let likeId = [$('#likeId').val()];
-                            	console.log(likeId);
-                            	
+                            	let likeCheck = document.getElementById("likeCheck").value;
+                            	console.log(likeCheck);
+
                             	const likeImg = document.getElementById("likeImg");
                             	
-    							$.ajax({
-    								url: "/post/detail/no/"+postNo,
-    								type: 'get',
-    								data: { postNo : postNo },
-    								success : function(data){
-    									console.log("추천 조회 성공");
-    									
-    									if(likeId === userId){
-    										$("#likeImg").attr("src", "/assets/images/post-surv/fullHeart.png");
-    									} else {
-    										$("#likeImg").attr("src", "/assets/images/post-surv/emptyHeart.png");
-    									}
-    								},
-    								error : function(xhr){
-    									console.log("추천 조회 실패");
-    									console.log(xhr);
-    								}
-    							});
-    						});
+                            	
+								if(likeCheck > 0){
+									likeImg.src="/assets/images/post-surv/fullHeart.png";
+//										$("#likeImg").attr("src", "/assets/images/post-surv/fullHeart.png");
+								} else {
+									likeImg.src="/assets/images/post-surv/emptyHeart.png";
+//										$("#likeImg").attr("src", "/assets/images/post-surv/emptyHeart.png");
+								}
+                            });
                             
                             $("#likeBtn").on("click", function(){
                             	

@@ -192,7 +192,7 @@
 	
 	<!-- 추천 여부 -->
 	<select id="findLike" resultType="int">
-	  SELECT COUNT(*)
+	  SELECT LIKE_CHECK
 	  	FROM POST_LIKE
 	   WHERE POST_NO = #{ postNo }
 	     AND LIKE_ID = #{ likeId }
