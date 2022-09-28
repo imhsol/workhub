@@ -76,53 +76,32 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
                             <div class="com-detail-title">
                                 <div class="detail-title">
                                     <h4 th:text="${ post.postTitle }">제목</h4>
-                                    <div class="com-detail-messenger">
-                                        <img src="/assets/images/post-surv/messenger.png" class="icon-messenger">
-                                        <span th:text="${ post.replyCnt }"></span>
-                                    </div>
                                 </div>
                                 <div class="com-detail-heart">
                                     <span th:text="${post.likeCnt}">추천수</span>
-									<input type="hidden" id="likeId" th:value="${ post.postLike.likeId }">
-									<input type="hidden" id="userId" th:value="${ #authentication.name }">
-									<input type="hidden" id="postNo" th:value="${ post.postNo }">
-                                    <button class="like-btn" id="likeBtn" name="likeBtn"><img id="likeImg" src="/assets/images/post-surv/emptyHeart.png" class="icon-emptyHeart"></button>
+                                    <input type="hidden" id="likeCheck" th:value="${findLike}">
+                                    <input type="hidden" id="postNo" th:value="${post.postNo}">
+                                    <button id="likeBtn" name="likeBtn"><img id="likeImg" src="/assets/images/post-surv/emptyHeart.png" class="icon-emptyHeart"></button>
                                 </div>
                             </div>
                             <script>
-                            $(function postLike(){
+                            
+                            $(function(){
                             	
-                            	const postNo = $('#postNo').val();
-                            	console.log(postNo);
-                            	
-                            	const userId = $('#userId').val();
-                            	console.log(userId);
-                            	
-                            	let likeId = [$('#likeId').val()];
-                            	console.log(likeId);
+                            	let likeCheck = document.getElementById("likeCheck").value;
+                            	console.log(likeCheck);
                             	
                             	const likeImg = document.getElementById("likeImg");
                             	
-    							$.ajax({
-    								url: "/post/detail/no/"+postNo,
-    								type: 'get',
-    								data: { postNo : postNo },
-    								success : function(data){
-    									console.log("추천 조회 성공");
-    									
-    									if(likeId === userId){
-    										$("#likeImg").attr("src", "/assets/images/post-surv/fullHeart.png");
-    									} else {
-    										$("#likeImg").attr("src", "/assets/images/post-surv/emptyHeart.png");
-    									}
-    								},
-    								error : function(xhr){
-    									console.log("추천 조회 실패");
-    									console.log(xhr);
-    								}
-    							});
-    						});
+                            	
+								if(likeCheck > 0){
+									likeImg.src="/assets/images/post-surv/fullHeart.png";
+								} else {
+									likeImg.src="/assets/images/post-surv/emptyHeart.png";
+								}
+                            });
                             
+                            //추천
                             $("#likeBtn").on("click", function(){
                             	
                             	const postNo = $('#postNo').val();
@@ -130,26 +109,81 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
                             	
                             	const likeImg = document.getElementById("likeImg");
                             	
-                            	$.ajax({
-                            		url: "/post/insertLike",
-                            		type: 'post',
-                            		data: { postNo : postNo },
-                            		success: function(data){
-                            			console.log('좋아요 성공');
-                            			if (data == 1) {
-                            	              $("#likeImg").attr("src", "/assets/images/post-surv/fullHeart.png");
-                            	              location.reload();
-                            	          } else {
-                            	              $("#likeImg").attr("src", "/assets/images/post-surv/emptyHeart.png");
-                            	              location.reload();
-                            	          }
-                            		},
-                            		error: function(xhr){
-                            			console.log('좋아요 실패');
-                            			console.log(xhr);
-                            		}
-                            	})
+                            	let likeCheck = document.getElementById("likeCheck").value;
+                            	
+                            	if(likeCheck > 0){
+                            		$.ajax({
+	                            		url: "/post/deleteLike",
+	                            		type: 'post',
+	                            		data: { postNo : postNo },
+	                            		success: function(data){
+	                            			console.log('추천 취소 성공');
+	                            			if (data == 1) {
+	                            	              $("#likeImg").attr("src", "/assets/images/post-surv/emptyHeart.png");
+	                            	              location.reload();
+	                            	          } else {
+	                            	              $("#likeImg").attr("src", "/assets/images/post-surv/fullHeart.png");
+	                            	              location.reload();
+	                            	          }
+	                            		},
+	                            		error: function(xhr){
+	                            			console.log('추천 취소 실패');
+	                            			console.log(xhr);
+	                            		}
+	                            	})
+                            	} else{
+	                            	$.ajax({
+	                            		url: "/post/insertLike",
+	                            		type: 'post',
+	                            		data: { postNo : postNo },
+	                            		success: function(data){
+	                            			console.log('추천 성공');
+	                            			if (data == 1) {
+	                            	              $("#likeImg").attr("src", "/assets/images/post-surv/fullHeart.png");
+	                            	              location.reload();
+	                            	          } else {
+	                            	              $("#likeImg").attr("src", "/assets/images/post-surv/emptyHeart.png");
+	                            	              location.reload();
+	                            	          }
+	                            		},
+	                            		error: function(xhr){
+	                            			console.log('추천 실패');
+	                            			console.log(xhr);
+	                            			console.log(likeCheck);
+	                            		}
+	                            	})
+                            	}
+                            	
                             });
+                            
+                            //추천 취소
+//                             $("#likeBtn").on("click", function(){
+                            	
+//                             	const postNo = $('#postNo').val();
+//                             	console.log(postNo);
+                            	
+//                             	const likeImg = document.getElementById("likeImg");
+                            	
+//                             	$.ajax({
+//                             		url: "/post/deleteLike",
+//                             		type: 'post',
+//                             		data: { postNo : postNo },
+//                             		success: function(data){
+//                             			console.log('추천 취소 성공');
+//                             			if (data == 1) {
+//                             	              $("#likeImg").attr("src", "/assets/images/post-surv/fullHeart.png");
+//                             	              location.reload();
+//                             	          } else {
+//                             	              $("#likeImg").attr("src", "/assets/images/post-surv/emptyHeart.png");
+//                             	              location.reload();
+//                             	          }
+//                             		},
+//                             		error: function(xhr){
+//                             			console.log('추천 취소 실패');
+//                             			console.log(xhr);
+//                             		}
+//                             	})
+//                             });
                             </script>
                             <div class="com-detail-writer">
                                 <img src="/assets/images/post-surv/grey.png" alt="profile" class="profile-photo">

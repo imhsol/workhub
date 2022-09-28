@@ -34,5 +34,7 @@ public interface PostService {
 	boolean insertLike(PostLikeDTO postLike) throws Exception;
 
 	int updateLikeCnt(Integer postNo, String likeId);
+
+	int deleteLike(Integer postNo, String likeId);
 	
 }

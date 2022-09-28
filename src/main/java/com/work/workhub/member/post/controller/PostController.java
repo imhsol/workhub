@@ -90,19 +90,24 @@ public class PostController {
 
 		PostDTO post = postService.findPostByNo(postNo);
 		
-		PostLikeDTO postLike = new PostLikeDTO();
+//		PostLikeDTO postLike = new PostLikeDTO();
+//		
+//		postLike.setPostNo(postNo);
+//		postLike.setLikeId(user.getId());
 		
-		String likeId = user.getId();
-		Integer likeCnt = postService.findLike(postNo, likeId);
+		Integer findLike = postService.findLike(postNo, user.getId());
 		
 		postService.updatePostCnt(postNo);
 		postService.updateReplyCnt(postNo);
 		
 		log.info("글 작성자 id : {}", post.getMember().getId());
 		log.info("글 조회자 id : {}", user.getId());
-		log.info("추천 확인 : {}", likeCnt);
+		log.info("추천 확인 : {}", findLike);
+		log.info("추천수 : {}", post.getLikeCnt());
 		
 		mv.addObject("post", post);
+		mv.addObject("findLike", findLike);
+//		mv.addObject("postLike", postLike);
 		
 		mv.setViewName("/post/detail");
 		
@@ -128,8 +133,8 @@ public class PostController {
 		postLike.setNo(no);
 		postLike.setLikeId(likeId);
 		
-		log.info("추천 요청 글 : {}", postNo);
-		log.info("추천 요청 아이디 : {}", no);
+		log.info("추천 글 : {}", postNo);
+		log.info("추천인 아이디 : {}", no);
 		
 		postService.insertLike(postLike);
 		postService.updateLikeCnt(postNo, likeId);
@@ -138,6 +143,23 @@ public class PostController {
 		
 		return "redirect:/post/detail/no/" + postNo;
 	}
+	
+	//게시글 추천 취소
+	@PostMapping("deleteLike")
+	@ResponseBody
+	public String deleteLike(@RequestParam("postNo") Integer postNo,@AuthenticationPrincipal UserImpl user, RedirectAttributes rttr, Locale locale) throws Exception {
+			
+		String likeId = user.getId();
+			
+		log.info("추천 취소 글 : {}", postNo);
+			
+		postService.deleteLike(postNo, likeId);
+		postService.updateLikeCnt(postNo, likeId);
+			
+		rttr.addFlashAttribute("successMessage", messageSource.getMessage("deleteLike", null, locale));
+			
+		return "redirect:/post/detail/no/" + postNo;
+		}
 
 	
 	//게시글 작성
