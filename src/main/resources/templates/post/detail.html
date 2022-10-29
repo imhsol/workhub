@@ -57,7 +57,7 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
                         <div class="card-header" >
                             <a th:href="@{/post/write}" class="btn btn-outline-primary">새글쓰기</a>
                             <div class="card-header-login" th:with="username=${ #authentication.name }">
-	                        <a th:href="@{'/post/update/no/' + ${ post.postNo }}" th:if="${ #strings.equals(post.member.id, username) }" class="btn btn-outline-primary">수정하기</a>
+	                        <a th:href="@{'/post/update/no/' + ${ post.postNo }}" th:if="${ #strings.equals(post.member.id, username) } " class="btn btn-outline-primary">수정하기</a>
 	                        <a href="#" th:id="${ post.postNo }" th:onclick="deletePost(this.getAttribute('id'))" th:if="${ #strings.equals(post.member.id, username) }" class="btn btn-outline-primary">삭제하기</a>
 	                        </div>
                             <a th:href="@{/post/list}" class="btn btn-outline-primary" id="btn-list">목록보기</a>
@@ -232,12 +232,12 @@ xmlns:sec="http://thymeleaf.org/extras/spring-security">
                                             <p th:text="${ reply.replyContent }">댓글 내용</p>
                                         </div>
                                         <!-- 댓글 수정란 (토글 기능 안됨) -->
-                                        <div id="updateReply" class="collapse multi-collapse">
-											<form th:action="@{|/reply/update/no/${ reply.replyNo }|}" method="post">
-												<input type="text" name="refReplyContent" size="70"> &nbsp; 
-												<input type="submit" value="수정">
-											</form>
-										</div>                                    
+<!--                                         <div id="updateReply" class="collapse multi-collapse"> -->
+<!-- 											<form th:action="@{|/reply/update/no/${ reply.replyNo }|}" method="post"> -->
+<!-- 												<input type="text" name="refReplyContent" size="70"> &nbsp;  -->
+<!-- 												<input type="submit" value="수정"> -->
+<!-- 											</form> -->
+<!-- 										</div>                                     -->
                                     </div>
                                 </li>
                             </ul>

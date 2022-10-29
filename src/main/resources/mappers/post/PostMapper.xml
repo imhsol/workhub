@@ -19,12 +19,12 @@
 		<association property="member" resultMap="loginMemberResultMap"/>
 		<association property="category" resultMap="categoryResultMap"/>
 		<association property="postLike" resultMap="postLikeResultMap"/>
-<!-- 		<collection property="postImg" resultMap="postImgResultMap"/> -->
+		<collection property="img" resultMap="imgResultMap"/>
 	</resultMap>
 	
 	<resultMap type="com.work.workhub.member.post.model.dto.PostLikeDTO" id="postLikeResultMap">
-		<id property="postNo" column="POST_NO"/>
-		<id property="no" column="NO"/>
+		<result property="postNo" column="POST_NO"/>
+		<result property="no" column="NO"/>
 		<result property="likeCheck" column="LIKE_CHECK"/>
 		<result property="likeId" column="LIKE_ID"/>
 		
@@ -38,21 +38,14 @@
 	</resultMap>
 	
 	<!-- img -->
-<!-- 	<resultMap type="com.work.workhub.member.post.model.dto.postImgDTO" id="postImgResultMap"> -->
-<!-- 		<result property="postNo" column="POST_NO"/> -->
-<!-- 		<result property="imgNo" column="IMG_NO"/> -->
-	
-<!-- 		<association property="post" resultMap="postResultMap"/> -->
-<!-- 		<collection property="img" resultMap="imgResultMap"/>  -->
-<!-- 	</resultMap> -->
-	
-<!-- 	<resultMap type="com.work.workhub.member.img.model.dto.imgDTO" id="imgResultMap"> -->
-<!-- 		<id property="imgNo" column="IMG_NO"/> -->
-<!-- 		<id property="orgName" column="ORG_NAME"/> -->
-<!-- 		<id property="svrName" column="SVR_NAME"/> -->
-<!-- 		<id property="imgPath" column="IMG_PATH"/> -->
-<!-- 		<id property="imgType" column="IMG_TYPE"/> -->
-<!-- 	</resultMap> -->
+	<resultMap type="com.work.workhub.member.post.model.dto.ImgDTO" id="imgResultMap">
+		<id property="imgNo" column="IMG_NO"/>
+		<result property="orgName" column="ORG_NAME"/>
+		<result property="svrName" column="SVR_NAME"/>
+		<result property="imgPath" column="IMG_PATH"/>
+		<result property="imgType" column="IMG_TYPE"/>
+		<result property="postNo" column="POST_NO"/>
+	</resultMap>
 	
 	<!-- member -->
 	<resultMap id="loginMemberResultMap" type="com.work.workhub.member.member.dto.MemberDTO">

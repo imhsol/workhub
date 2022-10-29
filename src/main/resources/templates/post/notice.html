@@ -17,13 +17,13 @@
     <link rel="stylesheet" href="/assets/css/app2.css">
     <link rel="stylesheet" href="/assets/css/com-surv.css">
     <link rel="shortcut icon" th:href="@{/assets/images/images/favicon-workHub.ico}" type="image/x-icon">
-    <script>
-		const successMessage = '[[${successMessage}]]';
+<!--     <script> -->
+<!-- 		const successMessage = '[[${successMessage}]]'; -->
 		
-		if(successMessage) {
-			alert(successMessage);
-		}
-	</script>
+<!-- 		if(successMessage) { -->
+<!-- 			alert(successMessage); -->
+<!-- 		} -->
+<!-- 	</script> -->
 </head>
 
 <body>
@@ -57,8 +57,8 @@
                         <div class="card-header">
                        		<!-- post/notice/write ? -->
                             <a th:href="@{/post/write}" class="btn btn-outline-primary">새글쓰기</a>
-                            <a th:href="@{/post/delete}" class="btn btn-outline-primary">삭제하기</a>
-                            <a th:href="@{/post/noticeRegist}" class="btn btn-outline-primary">공지등록</a>
+<!--                             <a th:href="@{/post/delete}" class="btn btn-outline-primary">삭제하기</a> -->
+<!--                             <a th:href="@{/post/noticeRegist}" class="btn btn-outline-primary">공지등록</a> -->
                         </div>
                         <div class="card-body">
                             <table class="table table-borderless" id="table1">
@@ -91,7 +91,7 @@
                                         <td th:text="${notice.member.name}">작성자</td>
                                         <td th:text="${notice.postDate}">작성 날짜</td>
                                         <td th:text="${notice.postCnt}">조회수</td>
-                                        <td th:text="${notice.postLike.postLikeCnt}">추천수</td>
+                                        <td th:text="${notice.likeCnt}">추천수</td>
                                     </tr>
                                 </tbody>
                             </table>
