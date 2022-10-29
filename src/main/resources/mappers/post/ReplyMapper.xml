@@ -108,6 +108,7 @@
 		 FROM REPLY R
 		 JOIN TBL_MEMBER M ON (R.NO = M.NO)
 		WHERE R.POST_NO = #{ postNo } 
+		ORDER BY R.REPLY_NO
 	</select>
 	
 	<!-- 댓글 작성 -->
